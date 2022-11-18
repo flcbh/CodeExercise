@@ -9,16 +9,16 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CodeExcercise
 {
     [TestClass]
-    public class MyTestClass
+    public class MyTestClass : IMyTestClass
     {
         [TestMethod]
         public void Test1()
         {
             var pets = new List<Pet>()
             {
-                new Dog() { Firstname = "Jim", Lastname = "Rogers", numberofVisits = 5, joinedPractice = DateTime.Now},
-                new Dog() { Firstname = "Tony", Lastname = "Smith", numberofVisits = 10, joinedPractice = new DateTime(1985, 7, 13)},
-                new Cat() { Firstname = "Steve", Lastname = "Roberts", numberofVisits = 20, joinedPractice = new DateTime(2002, 5, 6), numberOfLives = 9 }
+                new Dog() { Firstname = "Jim", Lastname = "Rogers", NumberofVisits = 5, JoinedPractice = DateTime.Now},
+                new Dog() { Firstname = "Tony", Lastname = "Smith", NumberofVisits = 10, JoinedPractice = new DateTime(1985, 7, 13)},
+                new Cat() { Firstname = "Steve", Lastname = "Roberts", NumberofVisits = 20, JoinedPractice = new DateTime(2002, 5, 6), NumberOfLives = 9 }
             };
 
             new Pet().printReport(pets, "PetsReport.csv");
@@ -27,11 +27,15 @@ namespace CodeExcercise
             Assert.AreEqual(4, outPets.Count());
         }
     }
-    
+
     public class Pet : Owner
     {
-        public int numberofVisits;
-        public DateTime joinedPractice;
+        //Encapsulate fields and use properties.
+        private int numberofVisits;
+        private DateTime joinedPractice;
+
+        public int NumberofVisits { get => numberofVisits; set => numberofVisits = value; }
+        public DateTime JoinedPractice { get => joinedPractice; set => joinedPractice = value; }
 
         // NOTE: This method prints a pets reports in csv format.
         public void printReport(IEnumerable<Pet> pets, string filename)
@@ -40,11 +44,11 @@ namespace CodeExcercise
             entries.Add("Owners name,Date Joined Practice,Number Of Visits,Number of Lives");
             foreach (var p in pets)
             {
-                var entry = string.Join(" ", p.Firstname, p.Lastname) + p.joinedPractice + "," + p.numberofVisits;
+                var entry = string.Join(" ", p.Firstname, p.Lastname) + p.JoinedPractice + "," + p.NumberofVisits;
                 if (p is Cat)
                 {
                     var cat = p as Cat;
-                    entry += "," + cat.numberOfLives;
+                    entry += "," + cat.NumberOfLives;
                 }
 
                 entries.Add(entry);
@@ -55,20 +59,27 @@ namespace CodeExcercise
 
     public class Dog : Pet
     {
-        public double CostPerVisit;
+        private double costPerVisit;
+
+        public double CostPerVisit { get => costPerVisit; set => costPerVisit = value; }
     }
 
     public class Cat : Pet
     {
-        public int? numberOfLives; 
-        public double CostPerVisit;
+        private int? numberOfLives;
+        private double costPerVisit;
+
+        public int? NumberOfLives { get => numberOfLives; set => numberOfLives = value; }
+        public double CostPerVisit { get => costPerVisit; set => costPerVisit = value; }
     }
     
     public class Owner
     {
-        public string Firstname;
+        private string firstname;
+        private string lastname;
 
-        public string Lastname;
+        public string Firstname { get => firstname; set => firstname = value; }
+        public string Lastname { get => lastname; set => lastname = value; }
     }
 
 }
